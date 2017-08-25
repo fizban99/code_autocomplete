@@ -2,6 +2,7 @@ import re
 from . interface import Provider, Completion
 from . generate_fake_bpy import fake_package_name
 
+fake_package_name2 = "_bge_fake"
 try: import jedi
 except: print("jedi library not found")
 
@@ -30,7 +31,7 @@ class JediCompletionProvider(Provider):
         try:
             script = jedi.Script(source, line_index, character_index, filepath)
             completions = script.completions()
-            ignored_words = (fake_package_name, "_bpy_path")
+            ignored_words = (fake_package_name, "_bpy_path", fake_package_name2, "_bge_path")
             return [JediCompletion(c) for c in completions if c.name not in ignored_words]
         except:
             return []
@@ -52,6 +53,11 @@ def iter_corrected_lines_from_line(line):
     if "bpy" in line:
         line = line.replace("import bpy", "import {} as bpy".format(fake_package_name))
         line = line.replace("from bpy", "from {}".format(fake_package_name))
+    yield line
+
+    if "bge" in line:
+        line = line.replace("import bge", "import {} as bge".format(fake_package_name2))
+        line = line.replace("from bge", "from {}".format(fake_package_name2))
     yield line
 
     if "def draw(self, context):" in line:

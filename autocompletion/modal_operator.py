@@ -112,7 +112,10 @@ class ModalTextOperator(bpy.types.Operator):
 
     def draw_callback_px(tmp, self, context):
         if context.area == active_text_area.get():
-            text_block = self.get_text_block()
+            try:
+                text_block = self.get_text_block()
+            except ReferenceError:
+                text_block = 0
             if not text_block: return
 
             for handler in self.handlers:
