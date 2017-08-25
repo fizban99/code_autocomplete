@@ -1,4 +1,4 @@
-autocompletion/suggestions/dynamic/
+autocompletion/suggestions/dynamic/_bpy_fake
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
